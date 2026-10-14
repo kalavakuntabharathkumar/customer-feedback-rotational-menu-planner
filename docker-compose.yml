@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: menuplanner
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in environment}
+    ports: ["5432:5432"]
+  api:
+    build: .
+    depends_on: [postgres]
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/menuplanner
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in environment}
+    ports: ["8080:8080"]
